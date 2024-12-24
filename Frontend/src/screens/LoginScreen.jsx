@@ -4,24 +4,33 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+// import { useStateContext } from '@/context/ContextProvider';
 
 const LoginScreen = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
+    // const { setUser, setToken } = useStateContext()
+    const navigate = useNavigate();
 
 
     const handleLogin = async () => {
         // console.log({ username, password, rememberMe });
         try {
-            const response = await axios.post("http://localhost:8000/api/blogs/login", { username, password } , { withCredentials: true });
-            alert("Login successful!");
+            const response = await axios.post("http://localhost:8000/api/blogs/login", { username, password }, { withCredentials: true });
+            // alert("Login successful!");
+            console.log(response);
+
+            navigate('/profile');
+
         } catch (err) {
             console.error(err);
-            alert("Login failed.");
+            // alert("Login failed.");
+
         }
     };
-    // todo: add the token in localstorage and redirect to home page
 
     return (
         <div className="mx-auto max-w-sm space-y-8 p-4 mt-60">

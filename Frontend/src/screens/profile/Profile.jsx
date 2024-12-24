@@ -1,9 +1,9 @@
-import React from 'react'
 import { Globe, Instagram, Twitter } from 'lucide-react'
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
+// import { Card, CardContent, CardHeader } from "@/components/ui/card"
 
 const Profile = () => {
 

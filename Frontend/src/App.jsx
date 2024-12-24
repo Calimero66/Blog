@@ -4,7 +4,7 @@ import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import AboutScreen from './screens/AboutScreen';
 import TagsScreen from './screens/TagsScreen';
-import Layout from './Components/Layout';
+import Layout from './components/layout/Layout';
 import RegisterForm from './screens/RegisterScreen';
 
 

@@ -1,11 +1,12 @@
 import { createBrowserRouter , Navigate } from "react-router-dom";
-import Layout from "./components/Layout";
+import Layout from "./components/layout/Layout";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterForm from "./screens/RegisterScreen";
 import HomeScreen from "./screens/HomeScreen";
 import TagsScreen from "./screens/TagsScreen";
 import AboutScreen from "./screens/AboutScreen";
 import Profile from "./screens/profile/profile";
+import ProtLayout from "./components/layout/protLayout";
 
 
 
@@ -23,7 +24,7 @@ const router = createBrowserRouter ([
             { path: "/home", element: <HomeScreen /> , index: true },
             { path: "/Tags", element: <TagsScreen /> },
             { path: "/about", element: <AboutScreen /> },
-            { path: "/profile", element: <Profile /> },
+            // { path: "/profile", element: <Profile /> },
         ],
 
     },
@@ -34,6 +35,15 @@ const router = createBrowserRouter ([
     {
         index: true, // Indicates this is the default route for "/"
         element: <Navigate to="/home" replace />,
+    },
+    {
+
+        path: "/" ,
+        element: <ProtLayout />,
+        children: [
+            { path: "/profile", element: <Profile /> , index: true },
+        ],
+
     },
 
 ]);

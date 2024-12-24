@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser, loginUser, isAuthenticated, logoutUser } from '../controllers/userController.js';
+import { registerUser, loginUser, isAuthenticated, logoutUser, protectedRoute } from '../controllers/userController.js';
 import { createPost, updatePost, deletePost } from '../controllers/postController.js'
 
 const router = express.Router();
@@ -21,8 +21,7 @@ router.put("/:postId", isAuthenticated, updatePost);
 router.delete("/:postId", isAuthenticated, deletePost);
 
 
-
-
+router.get('/isAuthenticated', isAuthenticated ,protectedRoute);
 router.post('/logout', logoutUser);
 
 export default router;

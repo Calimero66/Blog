@@ -105,3 +105,7 @@ export const logoutUser = (req, res) => {
     });
     res.status(200).json({ message: "Logged out successfully" });
 };
+
+export const protectedRoute = (req, res) => {
+    return res.status(200).json();
+};
