@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 import NavBar from '../NavBar';
 import axios from 'axios';
-import { Outlet } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
+
+
 
 const ProtLayout = () => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const navigate = useNavigate();
+
 
     useEffect(()=>{
 
@@ -19,6 +23,7 @@ const ProtLayout = () => {
             } catch (err) {
                 console.error(err);
                 // alert("token is not find.");
+                navigate('/login');
     
             }
         };
