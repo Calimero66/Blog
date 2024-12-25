@@ -21,7 +21,7 @@ export const isAuthenticated = (req, res, next) => {
 
 export const registerUser = async (req, res) => {
     try {
-        const { username, password,confirmPassword, email } = req.body;
+        const { username, password, email } = req.body;
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
@@ -31,7 +31,7 @@ export const registerUser = async (req, res) => {
 
         // Hash password and save user
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, password: hashedPassword,confirmPassword, email });
+        const newUser = new User({ username, password: hashedPassword, email });
         await newUser.save();
 
         // Create JWT token
@@ -109,3 +109,16 @@ export const logoutUser = (req, res) => {
 export const protectedRoute = (req, res) => {
     return res.status(200).json();
 };
+
+export const getUser = async (req, res) => {
+    try {
+        // this can be used to get all the user data but we only need username and email
+        // const user = await User.findById(req.user.userId)
+        // res.status(200).json(user); 
+        const user = await User.findById(req.user.userId).select("username email");
+        res.status(200).json(user);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to get user" });
+    }
+}

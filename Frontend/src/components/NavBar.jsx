@@ -1,99 +1,134 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import SearchBtn from './SearchBtn';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Avatar, AvatarFallback, AvatarImage, } from "@/components/ui/avatar"
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import SearchBtn from './SearchBtn';
 
 const NavBar = () => {
-
     const [profile, setProfile] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
-    useEffect(() => {
+    const [data, setData] = useState([]);
 
-        const prof = async () => {
+    useEffect(()=>{
+
+        const getUser = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/blogs/isAuthenticated", { withCredentials: true })
-                    .then(() => setLoading(false));
-                // alert("token find");
-                setProfile(true);
+                const response = await axios.get("http://localhost:8000/api/blogs/getUser",  { withCredentials: true });       
                 console.log(response);
-
+                setData(response.data);
+                console.log(response.data);
 
             } catch (err) {
                 console.error(err);
-                setLoading(false)
-                // alert("token is not find.");
-
             }
+        };
+        
+        getUser();
+    },[])
 
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                await axios.get("http://localhost:8000/api/blogs/isAuthenticated", {
+                    withCredentials: true
+                });
+                setProfile(true);
+                setLoading(false);
+            } catch (err) {
+                console.error(err);
+                setLoading(false);
+            }
+        };
+        fetchProfile();
+    }, []);
+
+    useEffect(() => {
+        const closeDropdown = (e) => {
+            if (isOpen) setIsOpen(false);
         };
 
-        prof();
-    }, [])
+        document.addEventListener('click', closeDropdown);
+        return () => document.removeEventListener('click', closeDropdown);
+    }, [isOpen]);
 
     return (
         <header className="w-full border-b">
             <div className="flex h-16 items-center justify-between px-6">
-                {/* Logo and Navigation */}
                 <div className="flex items-center gap-6">
-                    {profile ?
-                        <Link to="/home" className="font-bold text-2xl">
-                            nuntium.
-                        </Link>
-                        :
-                        <Link to="/login" className="font-bold text-2xl">
-                            nuntium.
-                        </Link>
-                    }
+                    <Link to={profile ? "/home" : "/login"} className="font-bold text-2xl">
+                        nuntium.
+                    </Link>
                     <nav className="hidden md:flex gap-6">
-                        <Link to="/home" className="text-sm hover:text-primary">
-                            Home
-                        </Link>
-                        <Link to="/tags" className="text-sm hover:text-primary">
-                            Tags
-                        </Link>
-                        <Link to="/about" className="text-sm hover:text-primary">
-                            About
-                        </Link>
+                        <Link to="/home" className="text-sm hover:text-primary">Home</Link>
+                        <Link to="/tags" className="text-sm hover:text-primary">Tags</Link>
+                        <Link to="/about" className="text-sm hover:text-primary">About</Link>
                     </nav>
                 </div>
-                {
-                    profile ?
-                        <div className="flex items-center gap-8">
-                            <SearchBtn />
-                            <Avatar>
-                                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                                <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                        </div>
-                        : loading ? <p>loading ...</p> :
-                            <div className="flex items-center gap-8">
 
-                                <SearchBtn />
-                                <div className="flex gap-2">
-                                    <Button variant="outline">
-                                        <Link to="/login" className="text-sm hover:text-primary">
-                                            Login
+                {profile ? (
+                    <div className="flex items-center gap-8">
+                        <SearchBtn />
+                        <div className="relative">
+                            <button onClick={(e) => {
+                                e.stopPropagation();
+                                setIsOpen(!isOpen);
+                            }} className="focus:outline-none">
+                                <Avatar>
+                                    <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                                    <AvatarFallback>CN</AvatarFallback>
+                                </Avatar>
+                            </button>
+
+                            {isOpen && (
+                                <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                                    <div className="py-1">
+                                        <div className="px-4 py-2 border-b">
+                                            <p className="text-sm font-medium">{data.username}</p>
+                                            <p className="text-xs text-gray-500">@{data.username}</p>
+                                        </div>
+                                        <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            Dashboard
                                         </Link>
-                                    </Button>
-                                    <Button>
-                                        <Link to="/Register" className="text-sm">
-                                            Register
+                                        <Link to="/write" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            Write a Post
                                         </Link>
-                                    </Button>
+                                        <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            Settings
+                                        </Link>
+                                        <Link to="/help" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            Help
+                                        </Link>
+                                        <div className="border-t">
+                                            <Link to="/logout" className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                                Sign out
+                                            </Link>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                }
+                            )}
+                        </div>
+                    </div>
+                ) : loading ? (
+                    <p>loading ...</p>
+                ) : (
+                    <div className="flex items-center gap-8">
+                        <SearchBtn />
+                        <div className="flex gap-2">
+                            <Button variant="outline">
+                                <Link to="/login" className="text-sm hover:text-primary">Login</Link>
+                            </Button>
+                            <Button>
+                                <Link to="/Register" className="text-sm">Register</Link>
+                            </Button>
+                        </div>
+                    </div>
+                )}
             </div>
         </header>
     );
 };
 
 export default NavBar;
-
-
-
-
-

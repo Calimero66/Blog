@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser, loginUser, isAuthenticated, logoutUser, protectedRoute } from '../controllers/userController.js';
+import { registerUser, loginUser, isAuthenticated, logoutUser, protectedRoute, getUser } from '../controllers/userController.js';
 import { createPost, updatePost, deletePost } from '../controllers/postController.js'
 
 const router = express.Router();
@@ -7,12 +7,12 @@ const router = express.Router();
 // User routes
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+router.get('/getUser',isAuthenticated ,getUser);
 
 // Protected route for testing
 router.get('/protected', isAuthenticated, (req, res) => {
     res.json({ message: 'Accès autorisé' });
     console.log(req.user);
-
 });
 
 //route postBlog

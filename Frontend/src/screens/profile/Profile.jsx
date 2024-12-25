@@ -3,9 +3,29 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 // import { Card, CardContent, CardHeader } from "@/components/ui/card"
 
 const Profile = () => {
+    const [data, setData] = useState([]);
+
+    useEffect(()=>{
+
+        const getUser = async () => {
+            try {
+                const response = await axios.get("http://localhost:8000/api/blogs/getUser",  { withCredentials: true });       
+                console.log(response);
+                setData(response.data);
+                console.log(response.data);
+
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        
+        getUser();
+    },[])
 
     const articles = [
         {
@@ -45,7 +65,7 @@ const Profile = () => {
                         <AvatarImage src="/placeholder.svg" alt="Arthur Black" />
                         <AvatarFallback>AB</AvatarFallback>
                     </Avatar>
-                    <h1 className="mt-4 text-3xl font-bold">Arthur Black</h1>
+                    <h1 className="mt-4 text-3xl font-bold">{data.username}</h1>
                     <p className="text-gray-500">@arthurblack</p>
                     <p className="mt-4 text-gray-600">
                         Ipsum adipisicing culpa est nisi consequat ex amet magna culpa veniam tempor irure ea. Reprehenderit labore do tempor eiusmod in consectetur ex sunt id mollit commodo ipsum deserunt quis.
