@@ -3,8 +3,8 @@ import Post from "../models/post";
 export const createPost = async (req, res) => {
     try {
         console.log(req.user);
-        const { title, content } = req.body;
-
+        const { title, content, tags, image } = req.body;
+        
         // Get userId from isAuthenticated middleware
         const author = req.user.userId; // Assuming the token contains the user's id in the payload
         console.log(author);
@@ -18,11 +18,15 @@ export const createPost = async (req, res) => {
         const newPost = new Post({
             title,
             content,
-            author,
+            author: req.user.userId, 
+            tags,
+            image,
         });
+
         const savedPost = await newPost.save();
 
         res.status(201).json(savedPost);
+        // res.status(201).json({ message: "Post created successfully", savedPost });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Failed to create post.", error: error.message });
@@ -33,7 +37,7 @@ export const createPost = async (req, res) => {
 export const updatePost = async (req, res) => {
     try {
         const { postId } = req.params;
-        const { title, content } = req.body;
+        const { title, content, tags, image } = req.body;
         const userId = req.user.userId;
 
         const post = await Post.findById(postId);
@@ -49,9 +53,12 @@ export const updatePost = async (req, res) => {
         // Update the post
         post.title = title || post.title;
         post.content = content || post.content;
+        post.tags = tags || post.tags;
+        post.image = image || post.image;
 
         const updatedPost = await post.save();
         res.status(200).json(updatedPost);
+        // res.status(200).json({ message: "Post updated successfully", updatedPost });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Failed to update post.", error: error.message });

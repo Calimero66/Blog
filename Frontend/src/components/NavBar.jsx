@@ -89,17 +89,17 @@ const NavBar = () => {
                                             <p className="text-sm font-medium">{data.username}</p>
                                             <p className="text-xs text-gray-500">@{data.username}</p>
                                         </div>
-                                        <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            Profile
+                                        </Link>
+                                        <Link to="/DashboardPage" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             Dashboard
                                         </Link>
                                         <Link to="/write" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             Write a Post
                                         </Link>
-                                        <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                            Settings
-                                        </Link>
-                                        <Link to="/help" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                            Help
+                                        <Link to="/allPost" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            All post
                                         </Link>
                                         <div className="border-t">
                                             <Link to="/logout" className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">

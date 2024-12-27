@@ -7,6 +7,9 @@ import TagsScreen from "./screens/TagsScreen";
 import AboutScreen from "./screens/AboutScreen";
 import Profile from "./screens/profile/profile";
 import ProtLayout from "./components/layout/protLayout";
+import DashboardLayout from "./components/layout/DashboardLayout";
+import DashboardPage from "./components/dashboard/Pagedashboard";
+import WritePage from "./components/dashboard/WritePost";
 
 
 
@@ -42,6 +45,17 @@ const router = createBrowserRouter ([
         element: <ProtLayout />,
         children: [
             { path: "/profile", element: <Profile /> , index: true },
+        ],
+
+    },
+    {
+
+        path: "/" ,
+        element: <DashboardLayout />,
+        children: [
+            { path: "/DashboardPage", element: <DashboardPage /> , index: true },
+            { path: "/WritePost", element: <WritePage /> , index: true },
+
         ],
 
     },

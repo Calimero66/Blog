@@ -66,7 +66,7 @@ const Profile = () => {
                         <AvatarFallback>AB</AvatarFallback>
                     </Avatar>
                     <h1 className="mt-4 text-3xl font-bold">{data.username}</h1>
-                    <p className="text-gray-500">@arthurblack</p>
+                    <p className="text-gray-500">@{data.username}</p>
                     <p className="mt-4 text-gray-600">
                         Ipsum adipisicing culpa est nisi consequat ex amet magna culpa veniam tempor irure ea. Reprehenderit labore do tempor eiusmod in consectetur ex sunt id mollit commodo ipsum deserunt quis.
                     </p>
