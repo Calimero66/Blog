@@ -2,12 +2,10 @@ import Post from "../models/post";
 
 export const createPost = async (req, res) => {
     try {
-        console.log(req.user);
-        const { title, content, tags, image } = req.body;
-        
-        // Get userId from isAuthenticated middleware
-        const author = req.user.userId; // Assuming the token contains the user's id in the payload
-        console.log(author);
+        // console.log(req.user);
+        const { title, content, tags } = req.body;
+
+        const author = req.user.userId;
         if (!title || !content) {
             return res.status(400).json({ message: "Title and content are required." });
         }
@@ -15,25 +13,25 @@ export const createPost = async (req, res) => {
             return res.status(400).json({ error: 'Author information is missing' });
         }
 
+        const image = req.file ? `/uploads/${req.file.filename}` : null;
         const newPost = new Post({
             title,
             content,
-            author: req.user.userId, 
-            tags,
-            image,
+            author,
+            tags, 
+            image, 
         });
 
         const savedPost = await newPost.save();
 
-        res.status(201).json(savedPost);
-        // res.status(201).json({ message: "Post created successfully", savedPost });
+        // res.status(201).json(savedPost);
+        res.status(201).json({ message: "Post created successfully", savedPost });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Failed to create post.", error: error.message });
     }
 };
 
-// Update a post
 export const updatePost = async (req, res) => {
     try {
         const { postId } = req.params;
@@ -50,7 +48,6 @@ export const updatePost = async (req, res) => {
             return res.status(403).json({ message: "You are not authorized to update this post." });
         }
 
-        // Update the post
         post.title = title || post.title;
         post.content = content || post.content;
         post.tags = tags || post.tags;
@@ -90,3 +87,92 @@ export const deletePost = async (req, res) => {
         res.status(500).json({ message: "Failed to delete post.", error: error.message });
     }
 };
+
+export const getAllPosts = async (req, res) => {
+    try {
+        const posts = await Post.find();
+        res.status(200).json(posts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to fetch posts.", error: error.message });
+    }
+};
+
+export const getTags = async (req, res) => {
+    try {
+        const tagsPost = await Post.find({}, 'tags');
+        // console.log("🚀 ~ tagsPost:", tagsPost);
+
+         // Extract tags from all posts and flatten the array
+        
+        const allTags = tagsPost.reduce((acc, post) =>{ 
+            return [...acc, ...(JSON.parse(post.tags) || [])]}, []);
+
+        const uniqueTags = [...new Set(allTags)];
+        res.status(200).json(uniqueTags);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to fetch posts.", error: error.message });
+    }
+};
+
+export const getPostsByTag = async (req, res) => {
+    try {
+        let tag = req.query.tag; // Get tag from query params
+
+        if (!tag) {
+            return res.status(400).json({ message: "Tag parameter is required" });
+        }
+
+        tag = String(tag); // Ensure tag is a string
+
+        const posts = await Post.find({
+            tags: { $regex: new RegExp(tag, "i") } // Case-insensitive regex search
+        });
+
+        res.status(200).json(posts);
+    } catch (error) {
+        console.error("Error fetching posts by tag:", error);
+        res.status(500).json({ message: "Failed to fetch posts by tag.", error: error.message });
+    }
+};
+
+
+export const getMyPosts = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const posts = await Post.find({ author: userId });
+        res.status(200).json(posts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to fetch your posts.", error: error.message });
+    }
+};
+
+// Get a single post
+export const getPost = async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: "Post not found." });
+        }
+        res.status(200).json(post);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to fetch post.", error: error.message });
+    }
+};
+
+// Get posts by author
+export const getPostsByAuthor = async (req, res) => {
+    try {
+        const { authorId } = req.params;
+        const posts = await Post.find({ author: authorId });
+        res.status(200).json(posts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to fetch posts.", error: error.message });
+    }
+};
+

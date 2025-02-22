@@ -1,23 +1,37 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import SearchBtn from './SearchBtn';
 
 const NavBar = () => {
+    const navigate = useNavigate();
+
     const [profile, setProfile] = useState(false);
     const [loading, setLoading] = useState(true);
     const [isOpen, setIsOpen] = useState(false);
 
     const [data, setData] = useState([]);
+    const handleLogout = async () => {
+        try {
+            await axios.post("http://localhost:8000/api/blogs/logout", {}, {
+                withCredentials: true
+            });
+            setProfile(false);
+            setIsOpen(false);
+            navigate('/login');
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
-    useEffect(()=>{
+    useEffect(() => {
 
         const getUser = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/blogs/getUser",  { withCredentials: true });       
-                console.log(response);
+                const response = await axios.get("http://localhost:8000/api/blogs/getUser", { withCredentials: true });
+                // console.log(response);
                 setData(response.data);
                 console.log(response.data);
 
@@ -25,9 +39,9 @@ const NavBar = () => {
                 console.error(err);
             }
         };
-        
+
         getUser();
-    },[])
+    }, [])
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -46,13 +60,14 @@ const NavBar = () => {
     }, []);
 
     useEffect(() => {
-        const closeDropdown = (e) => {
+        const closeDropdown = () => {
             if (isOpen) setIsOpen(false);
         };
 
         document.addEventListener('click', closeDropdown);
         return () => document.removeEventListener('click', closeDropdown);
     }, [isOpen]);
+
 
     return (
         <header className="w-full border-b">
@@ -92,19 +107,16 @@ const NavBar = () => {
                                         <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             Profile
                                         </Link>
-                                        <Link to="/DashboardPage" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                            Dashboard
-                                        </Link>
-                                        <Link to="/write" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <Link to="/WritePost" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             Write a Post
                                         </Link>
-                                        <Link to="/allPost" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                            All post
-                                        </Link>
                                         <div className="border-t">
-                                            <Link to="/logout" className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                            <button
+                                                onClick={handleLogout}
+                                                className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                                            >
                                                 Sign out
-                                            </Link>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

@@ -1,32 +1,23 @@
 import express from 'express';
-import multer from 'multer';
 import { 
     registerUser, 
     loginUser, 
-    isAuthenticated, 
     logoutUser, 
     protectedRoute, 
-    getUser 
+    getUser
 } from '../controllers/userController.js';
-import { createPost, updatePost, deletePost } from '../controllers/postController.js';
+import { createPost, updatePost, deletePost , getAllPosts ,getPost , getPostsByAuthor, getMyPosts ,getTags ,getPostsByTag  } from '../controllers/postController.js';
+import { isAuthenticated } from '../middleware/auth.js'; 
+import { upload } from '../middleware/uploadMiddleware.js'; // Use the shared multer config
+
 
 const router = express.Router();
-
-// Configure Multer for file uploads
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/"); // Directory to store uploaded files
-    },
-    filename: (req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`); // Add timestamp to avoid duplicate filenames
-    },
-});
-
-const upload = multer({ storage });
 
 // User routes
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+router.post('/logout', logoutUser);
+
 router.get('/getUser', isAuthenticated, getUser);
 
 // Protected route for testing
@@ -40,8 +31,18 @@ router.post('/createPost', isAuthenticated, upload.single("image"), createPost);
 router.put('/:postId', isAuthenticated, upload.single('image'), updatePost);
 router.delete("/:postId", isAuthenticated, deletePost);
 
+
+router.get('/getMyPosts',isAuthenticated, getMyPosts);
+
+
+router.get('/getTags', getTags);
+router.get('/getPostsByTag', getPostsByTag); 
+router.get('/getPost',isAuthenticated, getPost);
+router.get('/allPosts', getAllPosts);
+router.get('/getPostsByAuthor',isAuthenticated, getPostsByAuthor);
+
 // Authentication check
 router.get('/isAuthenticated', isAuthenticated, protectedRoute);
-router.post('/logout', logoutUser);
+
 
 export default router;

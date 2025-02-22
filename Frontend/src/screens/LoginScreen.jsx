@@ -12,17 +12,17 @@ const LoginScreen = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
-    // const { setUser, setToken } = useStateContext()
+    
     const navigate = useNavigate();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 
     const handleLogin = async () => {
-        // console.log({ username, password, rememberMe });
+        
         try {
             const response = await axios.post("http://localhost:8000/api/blogs/login", { username, password }, { withCredentials: true });
             // alert("Login successful!");
-            console.log(response);
+            // console.log(response);
 
             navigate('/profile');
 
@@ -40,7 +40,7 @@ const LoginScreen = () => {
                 const response = await axios.get("http://localhost:8000/api/blogs/isAuthenticated",  { withCredentials: true });
                 // alert("token find");
                 setIsAuthenticated(true);
-                console.log(response);
+                // console.log(response);
                 navigate('/profile');
                 
             } catch (err) {

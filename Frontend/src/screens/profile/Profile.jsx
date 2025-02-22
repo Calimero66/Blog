@@ -5,58 +5,36 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-// import { Card, CardContent, CardHeader } from "@/components/ui/card"
 
 const Profile = () => {
     const [data, setData] = useState([]);
+    const [posts, setPosts] = useState([]);
 
-    useEffect(()=>{
+    useEffect(() => {
 
         const getUser = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/blogs/getUser",  { withCredentials: true });       
+                const response = await axios.get("http://localhost:8000/api/blogs/getUser", { withCredentials: true });
                 console.log(response);
                 setData(response.data);
-                console.log(response.data);
+                // console.log(response.data);
 
             } catch (err) {
                 console.error(err);
             }
         };
-        
-        getUser();
-    },[])
 
-    const articles = [
-        {
-            category: "INTERIOR",
-            title: "Laborum Ullamco Sunt id ut Sunt",
-            date: "May 7, 2019 (6 mins read)",
-            excerpt: "Proident aliqua velit qui commodo officia qui consectetur dolor ullamco aliquip elit incididunt. Ea minim ex consectetur excepteur. Ex laborum nostrud mollit sint consectetur. Lorem amet aliqua do enim. Commodo nulla dolor enim excepteur. In aliquip mollit nulla consequat velit magna.",
-            image: "https://images.unsplash.com/photo-1620680779930-e74c15c8f7a0?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        },
-        {
-            category: "NATURE",
-            title: "Tempor deserunt Sunt Qui",
-            date: "November 3, 2012",
-            excerpt: "Ea qui dolor aute cupidatat ad pariatur proident. Mollit nulla tempor aute reprehenderit ut dolore mollit nisi consequat excepteur ex officia pariatur irure.",
-            image: "https://images.unsplash.com/photo-1620680779930-e74c15c8f7a0?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        },
-        {
-            category: "PLANTS",
-            title: "Occaecat Anim eu Qui",
-            date: "September 28, 2018",
-            excerpt: "Qui ipsum consectetur ad incididunt et aliquip exercitation laboris nisi reprehenderit. Et excepteur commodo esse enim ea aliqua officia reprehenderit.",
-            image: "https://images.unsplash.com/photo-1620680779930-e74c15c8f7a0?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        },
-        {
-            category: "FOOD",
-            title: "Fugiat Incididunt Voluptate Consequat",
-            date: "June 13, 2012",
-            excerpt: "Magna amet aliqua qui commodo quis amet consequat elit dolore consectetur.",
-            image: "https://images.unsplash.com/photo-1620680779930-e74c15c8f7a0?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        const getPost = async () => {
+            const res = await axios.get("http://localhost:8000/api/blogs/getMyPosts", { withCredentials: true });
+            console.log(res.data);
+            console.log(res);
+            setPosts(res.data);
         }
-    ];
+
+        getUser();
+        getPost();
+    }, [])
+
     return (
         <>
             <section className="flex flex-col items-center justify-start min-h-screen pt-6">
@@ -93,39 +71,63 @@ const Profile = () => {
                         <Card className="grid md:grid-cols-2 gap-6 p-0 overflow-hidden">
                             <div className="relative aspect-[4/3] md:aspect-auto">
                                 <img
-                                    src={articles[0].image}
-                                    alt={articles[0].title}
+                                    src={`http://localhost:8000${posts[0]?.image}`}
+                                    alt={posts[0]?.title}
                                     className="absolute inset-0 w-full h-full object-cover"
                                 />
                             </div>
                             <CardContent className="p-6">
-                                <Badge variant="secondary" className="mb-2">
-                                    {articles[0].category}
-                                </Badge>
-                                <h2 className="text-2xl font-bold mb-2">{articles[0].title}</h2>
-                                <p className="text-sm text-gray-500 mb-4">{articles[0].date}</p>
-                                <p className="text-gray-600">{articles[0].excerpt}</p>
+                                <div className="flex gap-2 mb-2">
+                                    {posts[0]?.tags && posts[0].tags[0] &&
+                                        JSON.parse(posts[0].tags[0]).map((tag, index) => (
+                                            <Badge key={index} variant="secondary">
+                                                {tag}
+                                            </Badge>
+                                        ))
+                                    }
+                                </div>
+                                <h2 className="text-2xl font-bold mb-2">{posts[0]?.title}</h2>
+                                <p className="text-sm text-gray-500 mb-4">
+                                    {posts[0]?.date ? new Date(posts[0].date).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    }) : 'Date not available'}
+                                </p>
+                                <p className="text-gray-600">{posts[0]?.content}</p>
                             </CardContent>
                         </Card>
 
                         {/* Regular Articles */}
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {articles.slice(1).map((article, index) => (
-                                <Card key={index} className="overflow-hidden">
+                            {posts.slice(1).map((post, index) => (
+                                <Card key={post._id} className="overflow-hidden">
                                     <div className="relative aspect-[3/2]">
                                         <img
-                                            src={article.image}
-                                            alt={article.title}
+                                            src={`http://localhost:8000${post.image}`}
+                                            alt={post.title}
                                             className="absolute inset-0 w-full h-full object-cover"
                                         />
                                     </div>
                                     <CardContent className="p-6">
-                                        <Badge variant="secondary" className="mb-2">
-                                            {article.category}
-                                        </Badge>
-                                        <h3 className="text-xl font-bold mb-2">{article.title}</h3>
-                                        <p className="text-sm text-gray-500 mb-4">{article.date}</p>
-                                        <p className="text-gray-600 line-clamp-3">{article.excerpt}</p>
+                                        <div className="flex gap-2 mb-2">
+                                            {post.tags && post.tags[0] &&
+                                                JSON.parse(post.tags[0]).map((tag, index) => (
+                                                    <Badge key={index} variant="secondary">
+                                                        {tag}
+                                                    </Badge>
+                                                ))
+                                            }
+                                        </div>
+                                        <h3 className="text-xl font-bold mb-2">{post.title}</h3>
+                                        <p className="text-sm text-gray-500 mb-4">
+                                            {new Date(post.date).toLocaleDateString('en-US', {
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric'
+                                            })}
+                                        </p>
+                                        <p className="text-gray-600 line-clamp-3">{post.content}</p>
                                     </CardContent>
                                 </Card>
                             ))}

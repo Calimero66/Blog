@@ -19,7 +19,7 @@ const postSchema = new mongoose.Schema({
         default: Date.now 
     },
     tags: { 
-        type: String, 
+        type: [String],
         required: true 
     },
     image: { 
