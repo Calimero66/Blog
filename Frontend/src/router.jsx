@@ -1,4 +1,4 @@
-import { createBrowserRouter , Navigate } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterForm from "./screens/RegisterScreen";
@@ -8,24 +8,35 @@ import AboutScreen from "./screens/AboutScreen";
 import Profile from "./screens/profile/profile";
 import ProtLayout from "./components/layout/protLayout";
 import WritePage from "./screens/WritePost";
+import PostDetail from "./screens/PostDetail";
+import EditPost from "./screens/EditPost";
 
-
-
-
-
-
-const router = createBrowserRouter ([
+const router = createBrowserRouter([
     {
 
-        path: "/" ,
+        path: "/",
         element: <Layout />,
         children: [
             { path: "/login", element: <LoginScreen /> },
             { path: "/register", element: <RegisterForm /> },
-            { path: "/home", element: <HomeScreen /> , index: true },
+            { path: "/home", element: <HomeScreen />, index: true },
             { path: "/Tags", element: <TagsScreen /> },
             { path: "/about", element: <AboutScreen /> },
             // { path: "/profile", element: <Profile /> },
+        ],
+
+    },
+
+    {
+
+        path: "/",
+        element: <ProtLayout />,
+        children: [
+            { path: "/profile", element: <Profile />, index: true },
+            { path: "/WritePost", element: <WritePage /> },
+            { path: "/post/:postId", element: <PostDetail />},
+            { path: "/edit/:id", element: <EditPost/>},
+
         ],
 
     },
@@ -36,17 +47,6 @@ const router = createBrowserRouter ([
     {
         index: true, // Indicates this is the default route for "/"
         element: <Navigate to="/home" replace />,
-    },
-    {
-
-        path: "/" ,
-        element: <ProtLayout />,
-        children: [
-            { path: "/profile", element: <Profile /> , index: true },
-            { path: "/WritePost", element: <WritePage /> , index: true },
-
-        ],
-
     },
 
 ]);

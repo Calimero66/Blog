@@ -98,10 +98,20 @@ export const getUser = async (req, res) => {
         // this can be used to get all the user data but we only need username and email
         // const user = await User.findById(req.user.userId)
         // res.status(200).json(user); 
-        const user = await User.findById(req.user.userId).select("username email");
+        const user = await User.findById(req.user.userId).select("_id username email");
         res.status(200).json(user);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Failed to get user" });
     }
 }
+
+export const getUseById = async (req, res) => {
+    try {
+        const { userId } = req.params ;
+        const user = await User.findById(userId).select("username");
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to get user" })
+    }
+};

@@ -19,13 +19,13 @@ const RegisterForm = () => {
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
-        e.preventDefault(); // Prevent page refresh
+        e.preventDefault();
 
         if (formData.password !== formData.confirmPassword) {
             setError("Passwords do not match.");
             return;
         }
-        setError(""); // Clear any previous error messages
+        setError("");
 
         try {
             const response = await axios.post(
@@ -33,9 +33,9 @@ const RegisterForm = () => {
                 formData
             );
 
-            // Show success message
+            
             setSuccess("Registration successful!");
-            setError(""); // Clear errors if any
+            setError(""); 
 
             setTimeout(() => {
                 navigate("/login");
@@ -44,7 +44,6 @@ const RegisterForm = () => {
         } catch (error) {
             console.error(error);
 
-            // Handle backend-specific errors
             if (error.response && error.response.data && error.response.data.message) {
                 setError(error.response.data.message);
             } else {

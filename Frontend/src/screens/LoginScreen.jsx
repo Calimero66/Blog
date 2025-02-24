@@ -6,8 +6,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-// import { useStateContext } from '@/context/ContextProvider';
-
 const LoginScreen = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

@@ -21,7 +21,7 @@ export default function SearchBar() {
                         <div className="relative w-full">
                             <Input
                                 type="search"
-                                placeholder="Search articles..."
+                                placeholder="Not working ..."
                                 className="w-full pr-10 bg-background"
                                 autoFocus
                             />

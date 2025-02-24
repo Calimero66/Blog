@@ -4,7 +4,8 @@ import {
     loginUser, 
     logoutUser, 
     protectedRoute, 
-    getUser
+    getUser,
+    getUseById
 } from '../controllers/userController.js';
 import { createPost, updatePost, deletePost , getAllPosts ,getPost , getPostsByAuthor, getMyPosts ,getTags ,getPostsByTag  } from '../controllers/postController.js';
 import { isAuthenticated } from '../middleware/auth.js'; 
@@ -17,8 +18,9 @@ const router = express.Router();
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/logout', logoutUser);
-
 router.get('/getUser', isAuthenticated, getUser);
+router.get('/getUseById/:userId', getUseById);
+
 
 // Protected route for testing
 router.get('/protected', isAuthenticated, (req, res) => {
@@ -28,8 +30,8 @@ router.get('/protected', isAuthenticated, (req, res) => {
 
 // Route for blog posts
 router.post('/createPost', isAuthenticated, upload.single("image"), createPost);
-router.put('/:postId', isAuthenticated, upload.single('image'), updatePost);
-router.delete("/:postId", isAuthenticated, deletePost);
+router.put('/updatePost/:postId', isAuthenticated, upload.single('image'), updatePost);
+router.delete("/deletePost/:postId", isAuthenticated, deletePost);
 
 
 router.get('/getMyPosts',isAuthenticated, getMyPosts);
@@ -37,7 +39,16 @@ router.get('/getMyPosts',isAuthenticated, getMyPosts);
 
 router.get('/getTags', getTags);
 router.get('/getPostsByTag', getPostsByTag); 
-router.get('/getPost',isAuthenticated, getPost);
+
+
+
+
+
+router.get('/getPost/:postId', getPost);
+
+
+
+
 router.get('/allPosts', getAllPosts);
 router.get('/getPostsByAuthor',isAuthenticated, getPostsByAuthor);
 
