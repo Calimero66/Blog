@@ -9,8 +9,8 @@ import {
 } from '../controllers/userController.js';
 import { createPost, updatePost, deletePost , getAllPosts ,getPost , getPostsByAuthor, getMyPosts ,getTags ,getPostsByTag  } from '../controllers/postController.js';
 import { isAuthenticated } from '../middleware/auth.js'; 
-import { upload } from '../middleware/uploadMiddleware.js'; // Use the shared multer config
-
+import { upload } from '../middleware/uploadMiddleware.js'; 
+import { createComment, deleteComment, getCommentByPost, updateComment } from '../controllers/commentController.js';
 
 const router = express.Router();
 
@@ -33,24 +33,20 @@ router.post('/createPost', isAuthenticated, upload.single("image"), createPost);
 router.put('/updatePost/:postId', isAuthenticated, upload.single('image'), updatePost);
 router.delete("/deletePost/:postId", isAuthenticated, deletePost);
 
-
+// Route for find posts
 router.get('/getMyPosts',isAuthenticated, getMyPosts);
-
-
 router.get('/getTags', getTags);
 router.get('/getPostsByTag', getPostsByTag); 
-
-
-
-
-
 router.get('/getPost/:postId', getPost);
-
-
-
-
 router.get('/allPosts', getAllPosts);
 router.get('/getPostsByAuthor',isAuthenticated, getPostsByAuthor);
+
+// Route for comments
+router.post('/comment', isAuthenticated, createComment);
+router.delete('/comment/:commentId', isAuthenticated, deleteComment);
+router.put('/comment/:commentId', isAuthenticated, updateComment);
+router.get('/comment/:postId', getCommentByPost);
+
 
 // Authentication check
 router.get('/isAuthenticated', isAuthenticated, protectedRoute);
