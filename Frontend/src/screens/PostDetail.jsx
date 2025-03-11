@@ -62,7 +62,7 @@ const PostDetail = () => {
     }, [postId])
 
     useEffect(() => {
-        const getUser = async () => {
+        const getUserByID = async () => {
             if (!post || !post.author) return
             try {
                 const response = await axios.get(`http://localhost:8000/api/blogs/getUseById/${post.author}`, {
@@ -74,7 +74,7 @@ const PostDetail = () => {
             }
         }
 
-        getUser()
+        getUserByID()
     }, [post])
 
     useEffect(() => {
@@ -117,7 +117,6 @@ const PostDetail = () => {
     const handleEdit = () => {
         navigate(`/edit/${postId}`)
     }
-
     
     const handleEditComment = (comment) => {
         setEditingCommentId(comment._id)

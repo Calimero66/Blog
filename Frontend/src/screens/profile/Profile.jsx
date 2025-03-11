@@ -22,21 +22,19 @@ const Profile = () => {
             }
         };
 
-        const getPost = async () => {
+        const getMyPosts = async () => {
             const res = await axios.get("http://localhost:8000/api/blogs/getMyPosts", { withCredentials: true });
             setPosts(res.data);
         }
 
         getUser();
-        getPost();
+        getMyPosts();
     }, [])
 
     const handleCardClick = (postId) => {
         // console.log(postId);
         navigate(`/post/${postId}`);
     };
-    console.log();
-    
 
     return (
         <>
