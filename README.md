@@ -37,7 +37,7 @@ A complete full-stack blog platform using **React.js (frontend)** and **Express.
 - Multer for image uploads
 
 ---
-
+```bash
 ## 📁 Project Structure
 
 ## 📁 Blog/
@@ -61,7 +61,7 @@ A complete full-stack blog platform using **React.js (frontend)** and **Express.
 ├── .babelrc
 └── package.json
 ---
-
+```
 ## ⚠️ Important
 
 > If the `uploads/` folder does **not exist** in `/server`, you **must create it manually**:
@@ -86,7 +86,7 @@ mkdir uploads
 
 # Start the backend server
 npm start
-
+```
 
 
 📬 Authentication
