@@ -93,6 +93,6 @@ npm start
 
     JWT tokens used for login and protecting routes.
 
-    Token stored in localStorage.
+    Token stored in cookies.
 
     Backend middleware validates tokens before allowing access to protected endpoints.
