@@ -21,7 +21,7 @@ const router = createBrowserRouter([
             { path: "/register", element: <RegisterForm /> },
             { path: "/home", element: <HomeScreen />, index: true },
             { path: "/Tags", element: <TagsScreen /> },
-            { path: "/about", element: <AboutScreen /> }
+            { path: "/about", element: <AboutScreen /> },
         ],
 
     },
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
         element: <Navigate to="/login" replace />,
     },
     {
-        index: true, // Indicates this is the default route for "/"
+        index: true,
         element: <Navigate to="/home" replace />,
     },
 
