@@ -5,7 +5,7 @@ import RegisterForm from "./screens/RegisterScreen";
 import HomeScreen from "./screens/HomeScreen";
 import TagsScreen from "./screens/TagsScreen";
 import AboutScreen from "./screens/AboutScreen";
-import Profile from "./screens/profile/profile";
+import Profile from "./screens/profile/Profile";
 import ProtLayout from "./components/layout/protLayout";
 import WritePage from "./screens/WritePost";
 import PostDetail from "./screens/PostDetail";
